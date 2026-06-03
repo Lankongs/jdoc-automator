@@ -2,35 +2,43 @@ package org.example;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import java.io.File;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // 1. 模擬一段準備被解析的 Java 程式碼字串
-        String testCode = "public class StudentAssignment {\n" +
-                "    public void submitHomework(String name) {\n" +
-                "        System.out.println(\"作業已繳交\");\n" +
-                "    }\n" +
-                "}";
+        // 1. 指定要掃描的專案資料夾路徑 (這裡我們先掃描當前專案的 src 資料夾)
+        String targetDirectory = "src";
 
-        try {
-            // 2. 呼叫 JavaParser 開始解析字串
-            CompilationUnit cu = StaticJavaParser.parse(testCode);
+        System.out.println("🔍 開始掃描目錄: " + targetDirectory);
 
-            // 3. 測試提取類別名稱與方法名稱
-            cu.getClassByName("StudentAssignment").ifPresent(classDecl -> {
-                System.out.println("====== [JavaParser 測試成功] ======");
-                System.out.println("成功偵測到類別: " + classDecl.getNameAsString());
+        // 2. 呼叫我們剛剛寫的 FileCrawler，拿到檔案清單
+        List<File> filesToProcess = FileCrawler.findJavaFiles(targetDirectory);
 
-                classDecl.getMethods().forEach(method -> {
-                    System.out.println("內含方法: " + method.getNameAsString());
-                    System.out.println("方法回傳值: " + method.getTypeAsString());
+        System.out.println("✅ 掃描完成，共找到 " + filesToProcess.size() + " 個 Java 檔案。");
+        System.out.println("========================================\n");
+
+        // 3. 遍歷清單，把每一個檔案交給 JavaParser 處理
+        for (File file : filesToProcess) {
+            try {
+                System.out.println("📄 正在解析: " + file.getName());
+
+                // 將實體檔案餵給 JavaParser
+                CompilationUnit cu = StaticJavaParser.parse(file);
+
+                // 嘗試抓出類別名稱
+                cu.getPrimaryTypeName().ifPresent(className -> {
+                    System.out.println("  -> 找到主類別: " + className);
                 });
-                System.out.println("=================================");
-            });
 
-        } catch (Exception e) {
-            System.err.println("❌ 語法解析失敗，請確認 JavaParser 是否正確引入。");
-            e.printStackTrace();
+                System.out.println("---");
+
+            } catch (Exception e) {
+                System.err.println("❌ 解析失敗: " + file.getName());
+                e.printStackTrace();
+            }
         }
+
+        System.out.println("\n🎉 所有檔案處理完畢！");
     }
 }
