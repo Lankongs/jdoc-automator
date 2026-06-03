@@ -12,12 +12,12 @@ public class Main {
     public static void main(String[] args) {
         // 1. 設定要掃描的專案資料夾 (這裡設定為掃描自己專案的 src 資料夾)
         String targetDirectory = "src";
-        System.out.println("🚀 [系統啟動] J-Doc Automator 開始執行...");
-        System.out.println("🔍 正在掃描目錄: " + targetDirectory);
+        System.out.println("[系統啟動] J-Doc Automator 開始執行...");
+        System.out.println("正在掃描目錄: " + targetDirectory);
 
         // 2. 呼叫搜索兵：找出所有 .java 檔案
         List<File> javaFiles = FileCrawler.findJavaFiles(targetDirectory);
-        System.out.println("✅ 共找到 " + javaFiles.size() + " 個 Java 檔案，準備進行語法解析。");
+        System.out.println("共找到 " + javaFiles.size() + " 個 Java 檔案，準備進行語法解析。");
         System.out.println("--------------------------------------------------");
 
         // 3. 準備「字串收集箱」(StringBuilder)，先寫入 Markdown 的大標題
@@ -37,14 +37,14 @@ public class Main {
 
                     // 【寫入類別名稱】 (Markdown H2)
                     String className = classDecl.getNameAsString();
-                    mdContent.append("## 📦 Class: `").append(className).append("`\n\n");
+                    mdContent.append("## Class: `").append(className).append("`\n\n");
 
                     // 嘗試抓取類別的 Javadoc 註解
                     classDecl.getJavadoc().ifPresent(javadoc -> {
                         mdContent.append("**描述:** ").append(javadoc.getDescription().toText()).append("\n\n");
                     });
 
-                    mdContent.append("### ⚙️ Methods (方法清單)\n\n");
+                    mdContent.append("###  Methods (方法清單)\n\n");
 
                     // 找出該類別下的所有方法
                     classDecl.getMethods().forEach(method -> {
@@ -72,14 +72,14 @@ public class Main {
                 });
 
             } catch (Exception e) {
-                System.err.println("❌ 解析失敗跳過: " + file.getName());
+                System.err.println("解析失敗跳過: " + file.getName());
             }
         }
 
         // 5. 呼叫輸出機：將收集好的 Markdown 字串寫成實體檔案
-        System.out.println("⏳ 語法解析完成，正在產出 Markdown 文件...");
+        System.out.println("語法解析完成，正在產出 Markdown 文件...");
         MarkdownGenerator.generateFile("Project_API.md", mdContent.toString());
 
-        System.out.println("🎉 [系統結束] 任務圓滿完成！");
+        System.out.println("[系統結束] 任務圓滿完成！");
     }
 }

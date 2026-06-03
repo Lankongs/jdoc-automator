@@ -4,9 +4,9 @@
 
 ---
 
-## 📦 Class: `FileCrawler`
+## Class: `FileCrawler`
 
-### ⚙️ Methods (方法清單)
+###  Methods (方法清單)
 
 #### `findJavaFiles`
 * **權限:** `public`
@@ -20,9 +20,9 @@
 
 ---
 
-## 📦 Class: `Main`
+## Class: `Main`
 
-### ⚙️ Methods (方法清單)
+###  Methods (方法清單)
 
 #### `main`
 * **權限:** `public`
@@ -31,9 +31,9 @@
 
 ---
 
-## 📦 Class: `MarkdownGenerator`
+## Class: `MarkdownGenerator`
 
-### ⚙️ Methods (方法清單)
+###  Methods (方法清單)
 
 #### `generateFile`
 * **權限:** `public`
