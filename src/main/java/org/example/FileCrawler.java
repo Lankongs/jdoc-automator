@@ -17,7 +17,7 @@ public class FileCrawler {
 
         // 基本防呆：確認這是一個存在的資料夾
         if (!rootDir.exists() || !rootDir.isDirectory()) {
-            System.err.println("❌ 錯誤：找不到指定的資料夾，或它不是一個目錄！路徑：" + directoryPath);
+            System.err.println(" 錯誤：找不到指定的資料夾，或它不是一個目錄！路徑：" + directoryPath);
             return javaFiles;
         }
 
