@@ -8,6 +8,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 public class LLMClient {
@@ -26,11 +28,17 @@ public class LLMClient {
             return " 錯誤：找不到環境變數 OPENAI_API_KEY";
         }
 
-        String prompt = "你是一個資深的 Java 工程師。請用「一句話（繁體中文，限50字以內）」解釋以下這段程式碼的功能。不要講廢話，不要包含 Markdown 語法，直接給解釋：\n\n" + methodCode;
+        String promptTemplate = "";
+        try {
+            promptTemplate = Files.readString(Path.of("prompt.txt"));
+        } catch (Exception e) {
+            promptTemplate = "預設提示詞..."; // 防呆
+        }
+        String prompt = promptTemplate + "\n\n" + methodCode;
 
         // 3. 依照 OpenAI 的規範建構 JSON 請求主體 (model + messages 陣列)
         JsonObject requestBody = new JsonObject();
-        requestBody.addProperty("model", "gpt-4o-mini"); // 使用高性價比的輕量主力模型
+        requestBody.addProperty("model", "gpt-4o-mini");
 
         JsonArray messagesArray = new JsonArray();
         JsonObject messageObj = new JsonObject();

@@ -15,7 +15,7 @@ public class Main {
         System.out.println("[系統啟動] J-Doc Automator 開始執行...");
         System.out.println("正在掃描目錄: " + targetDirectory);
 
-        // 2. 呼叫搜索兵：找出所有 .java 檔案
+        // 2. 呼叫Crawler：找出所有 .java 檔案
         List<File> javaFiles = FileCrawler.findJavaFiles(targetDirectory);
         System.out.println("共找到 " + javaFiles.size() + " 個 Java 檔案，準備進行語法解析。");
         System.out.println("--------------------------------------------------");
@@ -26,7 +26,7 @@ public class Main {
         mdContent.append("> 本文件由 J-Doc Automator 自動掃描原始碼生成。\n\n");
         mdContent.append("---\n\n");
 
-        // 4. 開始大迴圈：讓大腦 (JavaParser) 依序解析每個檔案
+        // 4. 開始大迴圈：讓(JavaParser) 依序解析每個檔案
         for (File file : javaFiles) {
             try {
                 // 讀取並解析檔案產生 AST
