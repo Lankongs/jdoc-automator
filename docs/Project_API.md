@@ -4,7 +4,7 @@
 
 ---
 
-## Class: `FileCrawler`
+##  Class: `FileCrawler`
 
 ###  Methods (方法清單)
 
@@ -20,7 +20,33 @@
 
 ---
 
-## Class: `Main`
+##  Class: `JDocGUI`
+
+###  Methods (方法清單)
+
+#### `appendLog`
+* **權限:** `private`
+* **回傳:** `void`
+* **參數:** `String message` 
+
+#### `clearLog`
+* **權限:** `private`
+* **回傳:** `void`
+* **參數:** 無
+
+#### `resetForm`
+* **權限:** `private`
+* **回傳:** `void`
+* **參數:** 無
+
+#### `main`
+* **權限:** `public`
+* **回傳:** `void`
+* **參數:** `String[] args` 
+
+---
+
+##  Class: `Main`
 
 ###  Methods (方法清單)
 
@@ -31,7 +57,7 @@
 
 ---
 
-## Class: `MarkdownGenerator`
+##  Class: `MarkdownGenerator`
 
 ###  Methods (方法清單)
 
