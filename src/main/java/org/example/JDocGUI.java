@@ -32,7 +32,7 @@ public class JDocGUI extends JFrame {
 
         pathField = new JTextField("請先選擇要掃描的 Java 專案資料夾...");
         pathField.setEditable(false);
-        selectBtn = new JButton("📂 選擇資料夾");
+        selectBtn = new JButton(" 選擇資料夾");
 
         topPanel.add(pathField, BorderLayout.CENTER);
         topPanel.add(selectBtn, BorderLayout.EAST);
@@ -128,8 +128,27 @@ public class JDocGUI extends JFrame {
 
                             classDecl.getMethods().forEach(method -> {
                                 mdContent.append("#### `").append(method.getNameAsString()).append("`\n");
+
+                                // 【新增】在這裡呼叫 AI！
+                                appendLog("  正在呼叫 AI 分析方法: " + method.getNameAsString() + "...");
+
+                                // method.toString() 會把這個方法的「完整原始碼」抓出來餵給 AI
+                                String aiExplanation = LLMClient.askAI(method.toString());
+
+                                // 把 AI 的解釋寫入 Markdown
+                                mdContent.append("> ** AI 解析:** ").append(aiExplanation).append("\n\n");
+
                                 mdContent.append("* **權限:** `").append(method.getAccessSpecifier().asString()).append("`\n");
                                 mdContent.append("* **回傳:** `").append(method.getTypeAsString()).append("`\n");
+
+                                // 【極度重要】防止免費 API 額度被鎖的保護機制
+                                try {
+                                    // 讓程式暫停 3 秒。因為免費版 Gemini 一分鐘只能呼叫 15 次。
+                                    // 如果沒有這個，你的程式 1 秒內丟 50 個方法過去，API 會直接封鎖你。
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                                 mdContent.append("* **參數:** ");
 
                                 if (method.getParameters().isEmpty()) {
