@@ -9,14 +9,14 @@
 ###  Methods (方法清單)
 
 #### `findJavaFiles`
-> ** AI 解析:** 驗證指定目錄後，遞迴搜尋並回傳該目錄及其所有子資料夾下的 Java 檔案清單。
+> ** AI 解析:** 這段程式碼的功能是掃描指定資料夾及其子資料夾，並回傳所有 .java 檔案的列表。
 
 * **權限:** `public`
 * **回傳:** `List<File>`
 * **參數:** `String directoryPath` 
 
 #### `scanDirectory`
-> ** AI 解析:** 透過遞迴深層掃描指定資料夾，找出所有以.java結尾的檔案並收集到結果清單中。
+> ** AI 解析:** 這段程式碼透過遞迴方式掃描資料夾，將所有副檔名為 .java 的檔案加入結果清單中。
 
 * **權限:** `private`
 * **回傳:** `void`
@@ -29,34 +29,28 @@
 ###  Methods (方法清單)
 
 #### `appendLog`
-> ** AI 解析:**  AI API 發生錯誤: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash
-Please retry in 42.054914506s.
+> ** AI 解析:** 這段程式碼透過 SwingUtilities 確保在多執行緒環境下安全地將訊息追加到 UI 的文字區域並自動滾動到最底部。
 
 * **權限:** `private`
 * **回傳:** `void`
 * **參數:** `String message` 
 
 #### `clearLog`
-> ** AI 解析:**  AI API 發生錯誤: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash
-Please retry in 30.706952138s.
+> ** AI 解析:** 這段程式碼的功能是清空控制台顯示區的文本內容。
 
 * **權限:** `private`
 * **回傳:** `void`
 * **參數:** 無
 
 #### `resetForm`
-> ** AI 解析:** 在事件派發執行緒中非同步啟用生成與選擇按鈕，以安全地重設表單狀態。
+> ** AI 解析:** 這段程式碼的功能是將生成按鈕和選擇按鈕重新啟用。
 
 * **權限:** `private`
 * **回傳:** `void`
 * **參數:** 無
 
 #### `main`
-> ** AI 解析:**  AI API 發生錯誤: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash
-Please retry in 54.432847098s.
+> ** AI 解析:** 這段程式碼在事件派發線程中啟動一個可視化的 JDocGUI 窗口。
 
 * **權限:** `public`
 * **回傳:** `void`
@@ -69,9 +63,7 @@ Please retry in 54.432847098s.
 ###  Methods (方法清單)
 
 #### `askAI`
-> ** AI 解析:**  AI API 發生錯誤: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash
-Please retry in 43.070991965s.
+> ** AI 解析:** 這段程式碼將 Java 方法原始碼傳給 OpenAI，並獲取其中文解釋。
 
 * **權限:** `public`
 * **回傳:** `String`
@@ -84,9 +76,7 @@ Please retry in 43.070991965s.
 ###  Methods (方法清單)
 
 #### `main`
-> ** AI 解析:**  AI API 發生錯誤: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash
-Please retry in 7.256367746s.
+> ** AI 解析:** 這段程式碼自動掃描指定資料夾中的所有 Java 檔案，解析其結構與註解，並生成一份 Markdown 格式的 API 說明文件。
 
 * **權限:** `public`
 * **回傳:** `void`
@@ -99,9 +89,7 @@ Please retry in 7.256367746s.
 ###  Methods (方法清單)
 
 #### `generateFile`
-> ** AI 解析:**  AI API 發生錯誤: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash
-Please retry in 55.925270026s.
+> ** AI 解析:** 這段程式碼將指定字串內容寫入一個 Markdown 檔案，並在必要時創建存放資料夾。
 
 * **權限:** `public`
 * **回傳:** `void`

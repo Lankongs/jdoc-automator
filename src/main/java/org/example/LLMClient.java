@@ -9,74 +9,67 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+
 public class LLMClient {
 
-    private static final String API_KEY = "AQ.Ab8RN6Ib_BtGBfLBxnjTM4LrCik9Kq2zJby-SQQq5p-spycXtw";
+    // 1. 從環境變數讀取全新的 OpenAI API Key
+    private static final String API_KEY = System.getenv("OPENAI_API_KEY");
 
-    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=" + API_KEY;
+    // 2. OpenAI 的標準對話模型 API 端點
+    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
 
     /**
-     * 傳入方法原始碼，回傳 AI 的中文解釋
+     * 傳入方法原始碼，回傳 OpenAI 的中文解釋
      */
     public static String askAI(String methodCode) {
+        if (API_KEY == null || API_KEY.isBlank()) {
+            return " 錯誤：找不到環境變數 OPENAI_API_KEY";
+        }
+
         String prompt = "你是一個資深的 Java 工程師。請用「一句話（繁體中文，限50字以內）」解釋以下這段程式碼的功能。不要講廢話，不要包含 Markdown 語法，直接給解釋：\n\n" + methodCode;
 
-        // 打包 JSON (保持不變)
-        JsonObject textPart = new JsonObject();
-        textPart.addProperty("text", prompt);
-        JsonArray partsArray = new JsonArray();
-        partsArray.add(textPart);
-        JsonObject contentObj = new JsonObject();
-        contentObj.add("parts", partsArray);
-        JsonArray contentsArray = new JsonArray();
-        contentsArray.add(contentObj);
-        JsonObject requestBodyObj = new JsonObject();
-        requestBodyObj.add("contents", contentsArray);
-        String jsonPayload = requestBodyObj.toString();
+        // 3. 依照 OpenAI 的規範建構 JSON 請求主體 (model + messages 陣列)
+        JsonObject requestBody = new JsonObject();
+        requestBody.addProperty("model", "gpt-4o-mini"); // 使用高性價比的輕量主力模型
 
-        int maxRetries = 3; // 最大重試次數
-        int retryDelay = 4000; // 失敗後等待 4 秒再重試
+        JsonArray messagesArray = new JsonArray();
+        JsonObject messageObj = new JsonObject();
+        messageObj.addProperty("role", "user");
+        messageObj.addProperty("content", prompt);
+        messagesArray.add(messageObj);
 
-        for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(API_URL))
-                        .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
-                        .build();
+        requestBody.add("messages", messagesArray);
+        String jsonPayload = requestBody.toString();
 
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
+        // 4. 發送 HTTP POST 請求 (注意：OpenAI 需要 Bearer Token 驗證)
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY) // OpenAI 的認證標頭
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                    .build();
 
-                // 檢查是否發生錯誤
-                if (jsonResponse.has("error")) {
-                    String errorMsg = jsonResponse.getAsJsonObject("error").get("message").getAsString();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
 
-                    // 如果是伺服器高負載或流量限制，且還沒超過最大重試次數，就進行重試
-                    if ((errorMsg.contains("high demand") || errorMsg.contains("quota")) && attempt < maxRetries) {
-                        System.out.println(" 伺服器忙碌中，將於 " + (retryDelay/1000) + " 秒後進行第 " + attempt + " 次重試...");
-                        Thread.sleep(retryDelay);
-                        continue; // 跳過本次，進入下一次迴圈重試
-                    }
-                    return " AI API 發生錯誤: " + errorMsg;
-                }
-
-                // 成功拿到解析，直接回傳
-                return jsonResponse.getAsJsonArray("candidates")
-                        .get(0).getAsJsonObject()
-                        .getAsJsonObject("content")
-                        .getAsJsonArray("parts")
-                        .get(0).getAsJsonObject()
-                        .get("text").getAsString().trim();
-
-            } catch (Exception e) {
-                if (attempt == maxRetries) {
-                    return " 連線失敗：" + e.getMessage();
-                }
-                try { Thread.sleep(retryDelay); } catch (Exception ignored) {}
+            // 檢查回應是否包含錯誤區塊
+            if (jsonResponse.has("error")) {
+                return " OpenAI API 發生錯誤: " + jsonResponse.getAsJsonObject("error").get("message").getAsString();
             }
+
+            // 5. 解析 OpenAI 的回傳結構：choices[0].message.content
+            String aiAnswer = jsonResponse.getAsJsonArray("choices")
+                    .get(0).getAsJsonObject()
+                    .getAsJsonObject("message")
+                    .get("content").getAsString();
+
+            return aiAnswer.trim();
+
+        } catch (Exception e) {
+            System.err.println(" OpenAI 連線失敗：" + e.getMessage());
+            return " AI 解釋生成失敗";
         }
-        return " AI 解釋生成失敗（伺服器持續過載）";
     }
 }
